@@ -748,6 +748,14 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.PurchaseGuildTerritory:
                     PurchaseGuildTerritory((C.PurchaseGuildTerritory)p);
                     return;
+                case (short)ClientPacketIds.C_HezeRequest: HezeRequest((C.C_HezeRequest)p); break;
+                case (short)ClientPacketIds.C_HezeAccept: HezeAccept((C.C_HezeAccept)p); break;
+                case (short)ClientPacketIds.C_HezeDecline: HezeDecline((C.C_HezeDecline)p); break;
+                case (short)ClientPacketIds.C_HezeBreak: Player?.BreakHeze(); break;
+                case (short)ClientPacketIds.C_HezeRequest: HezeRequest((C.C_HezeRequest)p); break;
+                case (short)ClientPacketIds.C_HezeAccept: HezeAccept((C.C_HezeAccept)p); break;
+                case (short)ClientPacketIds.C_HezeDecline: HezeDecline((C.C_HezeDecline)p); break;
+                case (short)ClientPacketIds.C_HezeBreak: Player?.BreakHeze(); break;
                 case (short)ClientPacketIds.DeleteItem:
                     DeleteItem((C.DeleteItem)p);
                     break;
@@ -2363,4 +2371,12 @@ namespace Server.MirNetwork
         public List<long> AccountsMade = new List<long>();
         public List<long> CharactersMade = new List<long>();
     }
+        private void HezeRequest(C.C_HezeRequest p) { PlayerObject target = Player?.FindObject(p.TargetID, Settings.HezeRange) as PlayerObject; Player?.RequestHeze(target); }
+        private void HezeAccept(C.C_HezeAccept p) { PlayerObject requester = Player?.FindObject(p.RequesterID, Settings.HezeRange) as PlayerObject; Player?.AcceptHeze(requester); }
+        private void HezeDecline(C.C_HezeDecline p) { PlayerObject requester = Player?.FindObject(p.RequesterID, Settings.HezeRange) as PlayerObject; Player?.DeclineHeze(requester); }
+
+        private void HezeRequest(C.C_HezeRequest p) { PlayerObject target = Player?.FindObject(p.TargetID, Settings.HezeRange) as PlayerObject; Player?.RequestHeze(target); }
+        private void HezeAccept(C.C_HezeAccept p) { PlayerObject requester = Player?.FindObject(p.RequesterID, Settings.HezeRange) as PlayerObject; Player?.AcceptHeze(requester); }
+        private void HezeDecline(C.C_HezeDecline p) { PlayerObject requester = Player?.FindObject(p.RequesterID, Settings.HezeRange) as PlayerObject; Player?.DeclineHeze(requester); }
+
 }

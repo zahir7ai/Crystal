@@ -1712,6 +1712,7 @@ public enum ServerPacketIds : short
     GuildTerritoryPage,
     StorageUnlockResult,
     StoragePasswordResult,
+    G_HezeRequest, G_HezeAccepted, G_HezeDeclined, G_HezeBroken, G_HezeEnergy, G_HezeComboActivated,
 }
 
 public enum ClientPacketIds : short
@@ -1876,6 +1877,7 @@ public enum ClientPacketIds : short
     UnlockStorage,
     SetStoragePassword,
     RemoveStoragePassword,
+    C_HezeRequest, C_HezeAccept, C_HezeDecline, C_HezeBreak,
 }
 
 public enum ConquestType : byte

@@ -2702,4 +2702,9 @@ namespace ClientPackets
             writer.Write(HeroInventory);
         }
     }
+    public sealed class C_HezeRequest : Packet { public override short Index { get { return (short)ClientPacketIds.C_HezeRequest; } } public uint TargetID; protected override void ReadPacket(BinaryReader r) { TargetID=r.ReadUInt32(); } protected override void WritePacket(BinaryWriter w) { w.Write(TargetID); } }
+    public sealed class C_HezeAccept : Packet { public override short Index { get { return (short)ClientPacketIds.C_HezeAccept; } } public uint RequesterID; protected override void ReadPacket(BinaryReader r) { RequesterID=r.ReadUInt32(); } protected override void WritePacket(BinaryWriter w) { w.Write(RequesterID); } }
+    public sealed class C_HezeDecline : Packet { public override short Index { get { return (short)ClientPacketIds.C_HezeDecline; } } public uint RequesterID; protected override void ReadPacket(BinaryReader r) { RequesterID=r.ReadUInt32(); } protected override void WritePacket(BinaryWriter w) { w.Write(RequesterID); } }
+    public sealed class C_HezeBreak : Packet { public override short Index { get { return (short)ClientPacketIds.C_HezeBreak; } } protected override void ReadPacket(BinaryReader r) { } protected override void WritePacket(BinaryWriter w) { } }
+
 }

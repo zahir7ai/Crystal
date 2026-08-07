@@ -6790,6 +6790,8 @@ namespace Server.MirObjects
                 defence = DefenceType.Agility;
 
             if (target.Attacked(this, damage, defence, damageWeapon) <= 0) return;
+            PlayerObject hezeOwner = this as PlayerObject;
+            if (hezeOwner != null) hezeOwner.Heze?.RegisterHit(target, damage);
             if (FatalSword)
             {
                 S.ObjectEffect p = new S.ObjectEffect { ObjectID = target.ObjectID, Effect = SpellEffect.FatalSword };
