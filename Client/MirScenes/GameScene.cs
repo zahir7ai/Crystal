@@ -17,6 +17,7 @@ namespace Client.MirScenes
 {
     public sealed class GameScene : MirScene
     {
+        public readonly HezeControl Heze = new HezeControl();
         public static GameScene Scene;
         public static bool Observing;
         public static bool AllowObserve;
@@ -1341,6 +1342,12 @@ namespace Client.MirScenes
         {
             switch (p.Index)
             {
+                case (short)ServerPacketIds.G_HezeRequest: HezeRequest((S.G_HezeRequest)p); break;
+                case (short)ServerPacketIds.G_HezeAccepted: Heze.Accepted((S.G_HezeAccepted)p); break;
+                case (short)ServerPacketIds.G_HezeDeclined: Heze.Broken(); break;
+                case (short)ServerPacketIds.G_HezeBroken: Heze.Broken(); break;
+                case (short)ServerPacketIds.G_HezeEnergy: Heze.Update((S.G_HezeEnergy)p); break;
+                case (short)ServerPacketIds.G_HezeComboActivated: HezeComboActivated((S.G_HezeComboActivated)p); break;
                 case (short)ServerPacketIds.KeepAlive:
                     KeepAlive((S.KeepAlive)p);
                     break;
@@ -12512,6 +12519,19 @@ namespace Client.MirScenes
             Info.ImageIndex = 0;
             Info.LastTick = CMain.Time;
         }
+        private void HezeRequest(S.G_HezeRequest p)
+        {
+            MirMessageBox box = new MirMessageBox(p.RequesterName + " wants to form a Heze combo.", MirMessageBoxButtons.YesNo);
+            box.YesButton.Click += (o, e) => Heze.Accept(p.RequesterID);
+            box.NoButton.Click += (o, e) => Heze.Decline(p.RequesterID);
+            box.Show();
+        }
+        private void HezeComboActivated(S.G_HezeComboActivated p)
+        {
+            // The effect is server-authoritative; retain its data for HUD/animation implementations.
+            // Animation id and damage are supplied by the packet for the renderer.
+        }
+
     }
 }
 

@@ -166,6 +166,14 @@ namespace Server.MirObjects
             set { Info.AllowObserve = value; }
         }
 
+        public HezeObject Heze { get; private set; }
+        public PlayerObject HezePartner { get; internal set; }
+        public PlayerObject HezeRequestor { get; private set; }
+        public void RequestHeze(PlayerObject target) { if (Heze == null) Heze = new HezeObject(this); if (!Heze.CanPair(target)) { ReceiveChat("Unable to form a Heze bond.", ChatType.System); return; } target.HezeRequestor = this; target.Enqueue(new S.G_HezeRequest { RequesterID = ObjectID, RequesterName = Name }); }
+        public void AcceptHeze(PlayerObject requester) { if (requester == null || HezeRequestor != requester) return; if (Heze == null) Heze = new HezeObject(this); if (requester.Heze == null) requester.Heze = new HezeObject(requester); HezeRequestor = null; if (!requester.Heze.CanPair(this)) return; requester.Heze.Start(this); Heze.Start(requester); HezeSkillDefinition skill = Settings.GetHezeSkill(Class, requester.Class); Enqueue(new S.G_HezeAccepted { PartnerName = requester.Name, SkillName = skill.Name, Level = (byte)Heze.Level }); requester.Enqueue(new S.G_HezeAccepted { PartnerName = Name, SkillName = skill.Name, Level = (byte)requester.Heze.Level }); }
+        public void DeclineHeze(PlayerObject requester) { if (HezeRequestor != requester) return; HezeRequestor = null; requester.Enqueue(new S.G_HezeDeclined { Name = Name }); }
+        public void BreakHeze() { if (Heze != null) Heze.Break("Heze cancelled."); }
+
         public PlayerObject MarriageProposal;
         public PlayerObject DivorceProposal;
         public PlayerObject MentorRequest;
@@ -476,6 +484,7 @@ namespace Server.MirObjects
         public override void Process()
         {
             if (Connection == null || Node == null || Info == null) return;
+            Heze?.Process();
 
             if (GroupInvitation != null && GroupInvitation.Node == null)
                 GroupInvitation = null;

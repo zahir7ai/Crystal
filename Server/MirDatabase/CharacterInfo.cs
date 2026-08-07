@@ -79,6 +79,9 @@ namespace Server.MirDatabase
         public UserItem CurrentRefine = null;
         public long CollectTime = 0, RefineTimeRemaining = 0;
         public List<UserMagic> Magics = new List<UserMagic>();
+        // Heze progression is character-owned; active pairings are deliberately never persisted.
+        public bool HezeLearned;
+        public long HezeExperience;
         public List<PetInfo> Pets = new List<PetInfo>();
         public List<Buff> Buffs = new List<Buff>();
         public List<Poison> Poisons = new List<Poison>();
@@ -386,6 +389,12 @@ namespace Server.MirDatabase
 
             if (version > 100)
                 HeroBehaviour = (HeroBehaviour)reader.ReadByte();
+
+            if (customVersion >= 1)
+            {
+                HezeLearned = reader.ReadBoolean();
+                HezeExperience = reader.ReadInt64();
+            }
         }
 
         public virtual void Save(BinaryWriter writer)
@@ -567,6 +576,8 @@ namespace Server.MirDatabase
             writer.Write(CurrentHeroIndex);
             writer.Write(HeroSpawned);
             writer.Write((byte)HeroBehaviour);
+            writer.Write(HezeLearned);
+            writer.Write(HezeExperience);
         }
 
         public SelectInfo ToSelectInfo()

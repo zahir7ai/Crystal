@@ -60,6 +60,22 @@ namespace Server
 
         public static string Language = "English";
 
+        // Heze (Combo/合击) v1.54
+        public static bool HezeEnabled = true;
+        public static int HezeRange = 3, HezeDuration = 60, HezeEnergyMax = 100, HezeEnergyGain = 5;
+        public static readonly int[] HezeLevelRequirements = { 10, 30, 50, 70, 90 };
+        public static readonly List<HezeSkillDefinition> HezeSkillList = new List<HezeSkillDefinition>
+        {
+            new HezeSkillDefinition("Thunder Strike", MirClass.Warrior, MirClass.Wizard, 2.0F, 2, 210),
+            new HezeSkillDefinition("Divine Strike", MirClass.Warrior, MirClass.Taoist, 2.1F, 2, 211),
+            new HezeSkillDefinition("Lightning Storm", MirClass.Wizard, MirClass.Taoist, 2.2F, 3, 212),
+            new HezeSkillDefinition("Shadow Arrow", MirClass.Assassin, MirClass.Archer, 2.2F, 2, 213),
+            new HezeSkillDefinition("Dark Summon", MirClass.Assassin, MirClass.Taoist, 2.3F, 2, 214),
+            new HezeSkillDefinition("Nature's Wrath", MirClass.Archer, MirClass.Taoist, 2.2F, 3, 215)
+        };
+        public static int GetHezeLevel(int characterLevel) { int result = 0; for (int i = 0; i < HezeLevelRequirements.Length; i++) if (characterLevel >= HezeLevelRequirements[i]) result = i + 1; return result; }
+        public static HezeSkillDefinition GetHezeSkill(MirClass first, MirClass second) { return HezeSkillList.Find(x => (x.First == first && x.Second == second) || (x.First == second && x.Second == first)); }
+
         //Network
         public static string IPAddress = "127.0.0.1";
 
@@ -1798,3 +1814,9 @@ namespace Server
 
     }
 }
+
+    public sealed class HezeSkillDefinition
+    {
+        public readonly string Name; public readonly MirClass First, Second; public readonly float DamageMultiplier; public readonly int Radius, Animation;
+        public HezeSkillDefinition(string name, MirClass first, MirClass second, float multiplier, int radius, int animation) { Name=name; First=first; Second=second; DamageMultiplier=multiplier; Radius=radius; Animation=animation; }
+    }

@@ -399,6 +399,10 @@ public abstract class Packet
                 return new C.GuildTerritoryPage();
             case (short)ClientPacketIds.DeleteItem:
                 return new C.DeleteItem();
+            case (short)ClientPacketIds.C_HezeRequest: return new ClientPackets.C_HezeRequest();
+            case (short)ClientPacketIds.C_HezeAccept: return new ClientPackets.C_HezeAccept();
+            case (short)ClientPacketIds.C_HezeDecline: return new ClientPackets.C_HezeDecline();
+            case (short)ClientPacketIds.C_HezeBreak: return new ClientPackets.C_HezeBreak();
             default:
                 return null;
         }
@@ -964,6 +968,12 @@ public abstract class Packet
                 return new S.SetCompass();
             case (short)ServerPacketIds.GuildTerritoryPage:
                 return new S.GuildTerritoryPage();
+            case (short)ServerPacketIds.G_HezeRequest: return new ServerPackets.G_HezeRequest();
+            case (short)ServerPacketIds.G_HezeAccepted: return new ServerPackets.G_HezeAccepted();
+            case (short)ServerPacketIds.G_HezeDeclined: return new ServerPackets.G_HezeDeclined();
+            case (short)ServerPacketIds.G_HezeBroken: return new ServerPackets.G_HezeBroken();
+            case (short)ServerPacketIds.G_HezeEnergy: return new ServerPackets.G_HezeEnergy();
+            case (short)ServerPacketIds.G_HezeComboActivated: return new ServerPackets.G_HezeComboActivated();
             default:
                 return null;
         }
